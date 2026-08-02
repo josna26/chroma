@@ -1,0 +1,90 @@
+.palette-card {
+    border-radius: 20px;
+    overflow: hidden;
+    opacity: 0;
+    background: rgba(255, 255, 255, .08);
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(255, 255, 255, .12);
+    transform: translateY(20px);
+    animation: fadeUp .6s ease forwards;
+    transition: .3s;
+    cursor: pointer;
+}
+
+.palette-card:hover {
+    transform: translateY(-8px);
+    border-color: #8b5cf6;
+    box-shadow:
+        0 0 18px rgba(139, 92, 246, .35),
+        0 0 35px rgba(59, 130, 246, .18);
+}
+
+.color-preview {
+    height: 170px;
+}
+
+.color-info {
+    padding: 1rem;
+}
+
+.color-info p {
+    text-align: left;
+    margin: 0;
+    font-size: .9rem;
+    color: #94a3b8;
+}
+
+.color-info h3 {
+    margin-top: .4rem;
+    font-size: 1.2rem;
+}
+
+.color-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.color-header svg {
+    color: #cbd5e1;
+    transition: .3s;
+}
+
+.palette-card:hover svg {
+    color: #ffffff;
+}
+
+.palette-card:active {
+    transform: scale(.97);
+}
+
+.copy-status {
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+    color: #cbd5e1;
+    font-size: .85rem;
+    transition: .3s;
+}
+
+.copy-status span {
+    font-size: .8rem;
+}
+
+.palette-card:hover .copy-status {
+    color: white;
+}
+
+@keyframes fadeUp {
+
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}

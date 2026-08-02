@@ -1,0 +1,23 @@
+.palette-preview{
+    max-width:1200px;
+    margin:auto;
+    padding:4rem 2rem 6rem;
+}
+
+.palette-preview h2{
+    text-align:center;
+    font-size:2.2rem;
+    margin-bottom:.8rem;
+}
+
+.palette-preview p{
+    text-align:center;
+    color:#94a3b8;
+    margin-bottom:3rem;
+}
+
+.palette-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:1.5rem;
+}
