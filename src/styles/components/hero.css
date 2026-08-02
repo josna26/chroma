@@ -6,42 +6,22 @@
     position: relative;
     overflow: hidden;
     padding: 2rem;
-    background:
-        radial-gradient(circle at top, #312e81 0%, #0f172a 65%);
 }
 
 .blob {
     position: absolute;
     border-radius: 50%;
-    filter: blur(100px);
-    opacity: .45;
+    filter: blur(130px);
+    opacity: .35;
     animation: float 10s ease-in-out infinite;
 }
 
 .blob1 {
-    width: 300px;
-    height: 300px;
+    width: 380px;
+    height: 380px;
     background: #7c3aed;
-    top: -70px;
-    left: -60px;
-}
-
-.blob2 {
-    width: 260px;
-    height: 260px;
-    background: #06b6d4;
-    right: -70px;
-    top: 120px;
-    animation-delay: 2s;
-}
-
-.blob3 {
-    width: 250px;
-    height: 250px;
-    background: #ec4899;
-    bottom: -70px;
-    left: 40%;
-    animation-delay: 4s;
+    top: -100px;
+    left: -100px;
 }
 
 .hero-content {
