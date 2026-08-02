@@ -2,11 +2,11 @@ import PaletteCard from "./PaletteCard";
 import "../styles/components/palette-preview.css";
 
 const demoPalette = [
-  "#7C3AED",
-  "#3B82F6",
-  "#06B6D4",
-  "#EC4899",
-  "#F8FAFC",
+  { role: "Primary", hex: "#7C3AED" },
+  { role: "Secondary", hex: "#3B82F6" },
+  { role: "Accent", hex: "#06B6D4" },
+  { role: "Highlight", hex: "#EC4899" },
+  { role: "Background", hex: "#F8FAFC" },
 ];
 
 function PalettePreview() {
@@ -23,7 +23,7 @@ function PalettePreview() {
 
         {demoPalette.map((color, index) => (
           <PaletteCard
-            key={color}
+            key={color.hex}
             color={color}
             index={index}
           />

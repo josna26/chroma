@@ -4,53 +4,62 @@ import { Copy, Check } from "lucide-react";
 import "../styles/components/palette-card.css";
 
 function PaletteCard({ color, index }) {
-  const [copied, setCopied] = useState(false);
+    const { role, hex } = color;
+    const [copied, setCopied] = useState(false);
 
-  const copyColor = async () => {
-    await navigator.clipboard.writeText(color);
+    const copyColor = async () => {
+        await navigator.clipboard.writeText(hex);
 
-    setCopied(true);
+        setCopied(true);
 
-    setTimeout(() => {
-      setCopied(false);
-    }, 1500);
-  };
+        setTimeout(() => {
+            setCopied(false);
+        }, 1500);
+    };
 
-  return (
-    <div
-      className="palette-card"
-      style={{ animationDelay: `${index * 0.12}s` }}
-      onClick={copyColor}
-    >
-      <div
-        className="color-preview"
-        style={{ background: color }}
-      ></div>
+    return (
+        <div className="palette-card">
+            <div className="palette-inner">
+                <div
+                    className="palette-card"
+                    style={{ animationDelay: `${index * 0.12}s` }}
+                    onClick={copyColor}
+                >
+                    <div
+                        className="color-preview"
+                        style={{ background: hex }}
+                    ></div>
 
-      <div className="color-info">
-        <div className="color-header">
-          <div>
-            <p>Color</p>
-            <h3>{color}</h3>
-          </div>
+                    <div className="color-info">
 
-          <div className="copy-status">
-            {copied ? (
-              <>
-                <Check size={18} />
-                <span>Copied!</span>
-              </>
-            ) : (
-              <>
-                <Copy size={18} />
-                <span>Copy</span>
-              </>
-            )}
-          </div>
+                        <p>{role}</p>
+
+                        <div className="color-row">
+
+                            <h3>{hex}</h3>
+
+                            <div className="copy-status">
+                                {copied ? (
+                                    <>
+                                        <Check size={18} />
+                                        <span>Copied!</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Copy size={18} />
+                                        <span>Copy</span>
+                                    </>
+                                )}
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
         </div>
-      </div>
-    </div>
-  );
+    );
 }
 
 export default PaletteCard;
