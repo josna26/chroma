@@ -1,85 +1,89 @@
-.prompt-section{
-    padding:6rem 2rem;
+.prompt-section {
+    padding: 6rem 2rem;
 }
 
-.prompt-container{
-    max-width:900px;
-    margin:auto;
-    text-align:center;
+.prompt-container {
+    max-width: 900px;
+    margin: auto;
+    text-align: center;
 }
 
-.prompt-container h2{
-    font-size:2.5rem;
-    margin-bottom:1rem;
+.prompt-container h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
 }
 
-.prompt-container p{
-    color:#94a3b8;
-    margin-bottom:2rem;
-    line-height:1.7;
+.prompt-container p {
+    color: #94a3b8;
+    margin-bottom: 2rem;
+    line-height: 1.7;
 }
 
-.prompt-container textarea{
-    width:100%;
-    min-height:160px;
-    resize:none;
-    border:none;
-    outline:none;
-    padding:1.3rem;
-    border-radius:20px;
-    background:rgba(255,255,255,.08);
-    color:white;
-    backdrop-filter:blur(18px);
-    font-size:1rem;
+.prompt-container textarea {
+    width: 100%;
+    min-height: 160px;
+    resize: none;
+    border: none;
+    outline: none;
+    padding: 1.3rem;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, .08);
+    color: white;
+    backdrop-filter: blur(18px);
+    font-size: 1rem;
 }
 
-.prompt-container textarea::placeholder{
-    color:#94a3b8;
+.prompt-container textarea::placeholder {
+    color: #94a3b8;
 }
 
-.example-prompts{
-    margin:1.5rem 0 2rem;
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
-    gap:.8rem;
+.example-prompts {
+    margin: 1.5rem 0 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: .8rem;
 }
 
-.example-prompts span{
-    padding:.6rem 1rem;
-    border-radius:999px;
-    background:rgba(255,255,255,.06);
-    color:#cbd5e1;
-    font-size:.9rem;
-    cursor:pointer;
-    transition:.3s;
+.example-prompts span {
+    max-width: 190px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding: .6rem 1rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .06);
+    color: #cbd5e1;
+    font-size: .9rem;
+    cursor: pointer;
+    transition: .3s;
+    transform: scale(1);
 }
 
-.example-prompts span:hover{
-    background:#7C3AED;
-    color:white;
+.example-prompts span:hover {
+    background: #7C3AED;
+    color: white;
+    transform: translateY(-3px);
 }
 
-.prompt-container button{
-    display:inline-flex;
-    align-items:center;
-    gap:.6rem;
-    padding:1rem 2rem;
-    border:none;
-    border-radius:999px;
-    background:linear-gradient(
-        135deg,
-        #7C3AED,
-        #3B82F6
-    );
-    color:white;
-    font-size:1rem;
-    font-weight:600;
-    cursor:pointer;
-    transition:.3s;
+.prompt-container button {
+    display: inline-flex;
+    align-items: center;
+    gap: .6rem;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 999px;
+    background: linear-gradient(135deg,
+            #7C3AED,
+            #3B82F6);
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: .3s;
 }
 
-.prompt-container button:hover{
-    transform:translateY(-3px);
-    box-shadow:0 15px 30px rgba(124,58,237,.35);
+.prompt-container button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(124, 58, 237, .35);
 }

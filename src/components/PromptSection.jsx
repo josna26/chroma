@@ -1,7 +1,12 @@
 import { Sparkles } from "lucide-react";
+import { useState } from "react";
+
 import "../styles/components/prompt-section.css";
+import { examplePrompts } from "../constants/prompts";
 
 function PromptSection() {
+    const [prompt, setPrompt] = useState("");
+
     return (
         <section className="prompt-section">
             <div className="prompt-container">
@@ -14,15 +19,20 @@ function PromptSection() {
                 </p>
 
                 <textarea
+                    value={prompt}
+                    onChange={(e) => setPrompt(e.target.value)}
                     placeholder="Example: A dreamy lavender sunset over snowy mountains..."
                 ></textarea>
 
                 <div className="example-prompts">
-                    <span>Cyberpunk</span>
-                    <span>Ocean Breeze</span>
-                    <span>Vintage Cafe</span>
-                    <span>Forest Cabin</span>
-                    <span>Neon Tokyo</span>
+                    {examplePrompts.map((item, index) => (
+                        <span
+                            key={index}
+                            onClick={() => setPrompt(item)}
+                        >
+                            {item}
+                        </span>
+                    ))}
                 </div>
 
                 <button>
