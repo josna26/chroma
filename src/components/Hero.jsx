@@ -27,13 +27,15 @@ function Hero() {
 
         <div className="prompt-box">
 
-          <input
-            type="text"
-            placeholder="Describe your palette..."
-          />
-
-          <button>
-            Generate ✨
+          <button
+            className="hero-btn"
+            onClick={() =>
+              document
+                .getElementById("prompt-section")
+                ?.scrollIntoView({ behavior: "smooth" })
+            }
+          >
+            Start Creating →
           </button>
 
         </div>

@@ -66,46 +66,28 @@
     font-size: 1.05rem;
 }
 
-.prompt-box {
-    width: 100%;
-    max-width: 700px;
-    margin: auto;
-    display: flex;
-    gap: 1rem;
-    padding: .8rem;
-    border-radius: 22px;
-    backdrop-filter: blur(18px);
-    background: rgba(255, 255, 255, .08);
-    border: 1px solid rgba(255, 255, 255, .12);
-}
-
-.prompt-box input {
-    flex: 1;
+.hero-btn {
+    margin-top: 2rem;
+    padding: 1rem 2rem;
     border: none;
-    outline: none;
-    background: none;
-    color: white;
-    font-size: 1rem;
-}
-
-.prompt-box input::placeholder {
-    color: #94a3b8;
-}
-
-.prompt-box button {
-    border: none;
-    padding: .95rem 1.5rem;
-    border-radius: 14px;
+    border-radius: 18px;
     background: linear-gradient(90deg,
             #8b5cf6,
             #3b82f6);
     color: white;
+    font-size: 1rem;
     font-weight: 600;
-    transition: .3s;
+    transition: .35s;
 }
 
-.prompt-box button:hover {
-    transform: translateY(-2px);
+.hero-btn:hover {
+    transform: translateY(-3px);
+    box-shadow:
+        0 10px 25px rgba(124, 58, 237, .35);
+}
+
+.hero-btn:active {
+    transform: scale(.97);
 }
 
 @keyframes float {

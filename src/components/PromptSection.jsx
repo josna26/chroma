@@ -8,7 +8,7 @@ function PromptSection() {
     const [prompt, setPrompt] = useState("");
 
     return (
-        <section className="prompt-section">
+        <section id="prompt-section" className="prompt-section">
             <div className="prompt-container">
 
                 <h2>Create a Palette with AI</h2>
