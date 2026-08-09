@@ -1,0 +1,474 @@
+.palette-playground {
+    width: 100%;
+    max-width: 1100px;
+    margin: 5rem auto;
+    padding: 2rem;
+}
+
+.playground-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.playground-label {
+    color: #8b5cf6;
+    font-size: .75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+.playground-header h2 {
+    margin-top: .5rem;
+    font-size: 2rem;
+}
+
+.playground-header p {
+    max-width: 550px;
+    margin-top: .7rem;
+    color: #94a3b8;
+    line-height: 1.6;
+}
+
+.playground-tabs {
+    display: flex;
+    gap: .4rem;
+    padding: .35rem;
+    border: 1px solid rgba(255, 255, 255, .1);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, .04);
+}
+
+.playground-tabs button {
+    border: none;
+    padding: .6rem .85rem;
+    border-radius: 10px;
+    background: transparent;
+    color: #94a3b8;
+    font-size: .75rem;
+    transition: .3s;
+}
+
+.playground-tabs button:hover {
+    color: white;
+}
+
+.playground-tabs button.active {
+    background: rgba(255, 255, 255, .1);
+    color: white;
+}
+
+.playground-content {
+    width: 100%;
+}
+
+.ui-preview {
+    min-height: 540px;
+    padding: 1.5rem;
+    border-radius: 26px;
+    overflow: hidden;
+    transition: .4s;
+}
+
+.preview-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid;
+}
+
+.preview-nav strong {
+    font-size: .85rem;
+    letter-spacing: 1px;
+}
+
+.preview-nav div {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    font-size: .75rem;
+    opacity: .8;
+}
+
+.preview-nav button {
+    border: none;
+    padding: .55rem .9rem;
+    border-radius: 9px;
+    font-size: .75rem;
+    font-weight: 700;
+}
+
+.preview-hero {
+    max-width: 700px;
+    margin: 5rem auto 4rem;
+    text-align: center;
+}
+
+.preview-hero > span {
+    font-size: .7rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+}
+
+.preview-hero h3 {
+    margin: .8rem 0;
+    font-size: 3rem;
+    line-height: 1.05;
+}
+
+.preview-hero p {
+    max-width: 500px;
+    margin: 0 auto 1.5rem;
+    font-size: .9rem;
+    line-height: 1.6;
+}
+
+.preview-main-button {
+    border: none;
+    padding: .8rem 1.2rem;
+    border-radius: 11px;
+    font-weight: 700;
+    transition: .3s;
+}
+
+.preview-main-button:hover {
+    transform: translateY(-2px);
+}
+
+.preview-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.preview-card {
+    display: flex;
+    flex-direction: column;
+    gap: .45rem;
+    padding: 1rem;
+    border: 1px solid;
+    border-radius: 16px;
+}
+
+.preview-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.preview-card span {
+    margin-top: .3rem;
+    font-size: .7rem;
+    opacity: .6;
+}
+
+.preview-card strong {
+    font-family: monospace;
+    font-size: .8rem;
+}
+
+.playground-placeholder {
+    min-height: 300px;
+    display: grid;
+    place-content: center;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, .08);
+    border-radius: 24px;
+    background: rgba(255, 255, 255, .03);
+}
+
+.playground-placeholder h3 {
+    font-size: 1.3rem;
+}
+
+.playground-placeholder p {
+    margin-top: .5rem;
+    color: #64748b;
+}
+
+@media (max-width: 768px) {
+
+    .palette-playground {
+        padding: 1rem;
+    }
+
+    .playground-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .playground-tabs {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .playground-tabs button {
+        white-space: nowrap;
+    }
+
+    .preview-nav div span {
+        display: none;
+    }
+
+    .preview-hero {
+        margin: 4rem auto 3rem;
+    }
+
+    .preview-hero h3 {
+        font-size: 2.2rem;
+    }
+
+    .preview-cards {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+.contrast-playground {
+    min-height: 540px;
+    display: grid;
+    place-items: center;
+    padding: 3rem;
+    border-radius: 26px;
+    transition: .4s;
+}
+
+.contrast-content {
+    width: 100%;
+    max-width: 650px;
+    text-align: center;
+}
+
+.contrast-label {
+    font-size: .7rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    opacity: .65;
+}
+
+.contrast-content h3 {
+    margin-top: .7rem;
+    font-size: 2.2rem;
+}
+
+.contrast-content > p {
+    max-width: 500px;
+    margin: .8rem auto 2rem;
+    font-size: .9rem;
+    line-height: 1.6;
+    opacity: .7;
+}
+
+.contrast-preview-box {
+    width: 100%;
+    min-height: 170px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: .7rem;
+    border: 1px solid currentColor;
+    border-radius: 20px;
+}
+
+.contrast-preview-box span {
+    font-size: 4rem;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.contrast-preview-box strong {
+    font-family: monospace;
+    font-size: 1rem;
+    opacity: .7;
+}
+
+.contrast-values {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.contrast-values div {
+    display: flex;
+    flex-direction: column;
+    gap: .4rem;
+    padding: 1rem;
+    border: 1px solid currentColor;
+    border-radius: 14px;
+}
+
+.contrast-values span {
+    font-size: .65rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: .6;
+}
+
+.contrast-values strong {
+    font-family: monospace;
+    font-size: .85rem;
+}
+
+.contrast-status {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+    padding: .9rem 1rem;
+    border-top: 1px solid currentColor;
+    font-size: .75rem;
+}
+
+@media (max-width: 600px) {
+
+    .contrast-playground {
+        padding: 2rem 1rem;
+    }
+
+    .contrast-content h3 {
+        font-size: 1.7rem;
+    }
+
+    .contrast-values {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+.tokens-playground {
+    min-height: 540px;
+    padding: 2rem;
+    border: 1px solid rgba(255, 255, 255, .08);
+    border-radius: 26px;
+    background: rgba(255, 255, 255, .03);
+}
+
+.tokens-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.tokens-header > div > span {
+    font-size: .65rem;
+    font-weight: 700;
+    letter-spacing: 1.4px;
+    color: #8b5cf6;
+}
+
+.tokens-header h3 {
+    margin-top: .4rem;
+    font-size: 1.5rem;
+}
+
+.tokens-header button {
+    border: 1px solid rgba(255, 255, 255, .12);
+    padding: .65rem 1rem;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, .06);
+    color: white;
+    font-size: .75rem;
+    transition: .3s;
+}
+
+.tokens-header button:hover {
+    background: rgba(255, 255, 255, .1);
+}
+
+.token-code {
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, .08);
+    border-radius: 16px;
+    background: #090b12;
+}
+
+.code-header {
+    display: flex;
+    justify-content: space-between;
+    padding: .7rem 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, .08);
+    color: #64748b;
+    font-size: .7rem;
+}
+
+.token-code pre {
+    margin: 0;
+    padding: 1.2rem;
+    overflow-x: auto;
+    color: #cbd5e1;
+    font-family: monospace;
+    font-size: .8rem;
+    line-height: 1.8;
+}
+
+.token-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: .7rem;
+    margin-top: 1rem;
+}
+
+.token-item {
+    display: flex;
+    align-items: center;
+    gap: .8rem;
+    padding: .8rem;
+    border: 1px solid rgba(255, 255, 255, .07);
+    border-radius: 13px;
+    background: rgba(255, 255, 255, .025);
+}
+
+.token-swatch {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    border-radius: 9px;
+}
+
+.token-info {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: .2rem;
+}
+
+.token-info span {
+    font-size: .75rem;
+    color: #cbd5e1;
+}
+
+.token-info strong {
+    font-family: monospace;
+    font-size: .65rem;
+    color: #64748b;
+}
+
+.token-item code {
+    font-size: .7rem;
+    color: #94a3b8;
+}
+
+@media (max-width: 600px) {
+
+    .tokens-playground {
+        padding: 1rem;
+    }
+
+    .tokens-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .token-list {
+        grid-template-columns: 1fr;
+    }
+
+}
