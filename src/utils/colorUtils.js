@@ -167,3 +167,29 @@ export function getContrastRating(ratio) {
         level: "poor"
     };
 }
+
+export function findBestContrastPair(colors) {
+    let bestPair = null;
+    let highestContrast = 0;
+
+    for (let i = 0; i < colors.length; i++) {
+        for (let j = i + 1; j < colors.length; j++) {
+            const ratio = getContrastRatio(
+                colors[i],
+                colors[j]
+            );
+
+            if (ratio > highestContrast) {
+                highestContrast = ratio;
+
+                bestPair = {
+                    foreground: colors[i],
+                    background: colors[j],
+                    ratio
+                };
+            }
+        }
+    }
+
+    return bestPair;
+}
