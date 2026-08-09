@@ -4,10 +4,12 @@ import { Copy, Check } from "lucide-react";
 import "../styles/components/palette-card.css";
 
 function PaletteCard({ color, index }) {
+    const { hex, rgb, hsl } = color;
+
     const [copied, setCopied] = useState(false);
 
     const copyColor = async () => {
-        await navigator.clipboard.writeText(color);
+        await navigator.clipboard.writeText(hex);
 
         setCopied(true);
 
@@ -26,7 +28,7 @@ function PaletteCard({ color, index }) {
 
                 <div
                     className="color-preview"
-                    style={{ background: color }}
+                    style={{ background: hex }}
                 ></div>
 
                 <div className="color-info">
@@ -35,7 +37,7 @@ function PaletteCard({ color, index }) {
 
                     <div className="color-row">
 
-                        <h3>{color}</h3>
+                        <h3>{hex}</h3>
 
                         <div className="copy-status">
                             {copied ? (
@@ -53,7 +55,13 @@ function PaletteCard({ color, index }) {
 
                     </div>
 
+                    <div className="color-details">
+                        <span>{rgb}</span>
+                        <span>{hsl}</span>
+                    </div>
+
                 </div>
+
             </div>
         </div>
     );

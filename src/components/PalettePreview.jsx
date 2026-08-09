@@ -1,7 +1,10 @@
 import PaletteCard from "./PaletteCard";
 import "../styles/components/palette-preview.css";
+import { getColorDetails } from "../utils/colorUtils";
 
 function PalettePreview({ palette }) {
+    const colorDetails = palette.map((color) => getColorDetails(color));
+
     return (
         <section className="palette-preview">
 
@@ -13,9 +16,9 @@ function PalettePreview({ palette }) {
 
             <div className="palette-grid">
 
-                {palette.map((color, index) => (
+                {colorDetails.map((color, index) => (
                     <PaletteCard
-                        key={color}
+                        key={color.hex}
                         color={color}
                         index={index}
                     />

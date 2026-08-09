@@ -121,6 +121,22 @@
     color: #ffffff;
 }
 
+.color-details {
+    display: flex;
+    flex-direction: column;
+    gap: .3rem;
+    margin-top: .8rem;
+    padding-top: .7rem;
+    border-top: 1px solid rgba(255, 255, 255, .08);
+}
+
+.color-details span {
+    color: #64748b;
+    font-family: monospace;
+    font-size: .75rem;
+    letter-spacing: .2px;
+}
+
 @keyframes fadeUp {
 
     from {
