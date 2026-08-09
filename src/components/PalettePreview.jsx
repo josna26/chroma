@@ -3,7 +3,9 @@ import "../styles/components/palette-preview.css";
 import { getColorDetails } from "../utils/colorUtils";
 
 function PalettePreview({ palette }) {
-    const colorDetails = palette.map((color) => getColorDetails(color));
+    const colorDetails = palette.map((color, index) =>
+      getColorDetails(color, index)
+  );
 
     return (
         <section className="palette-preview">

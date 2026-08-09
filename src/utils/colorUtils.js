@@ -54,7 +54,7 @@ export function rgbToHsl(r, g, b) {
     };
 }
 
-export function getColorDetails(hex) {
+export function getColorDetails(hex, index) {
     const rgb = hexToRgb(hex);
 
     const hsl = rgbToHsl(
@@ -66,6 +66,35 @@ export function getColorDetails(hex) {
     return {
         hex,
         rgb: `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`,
-        hsl: `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`
+        hsl: `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`,
+        role: getColorRole(hex, index)
     };
+}
+
+export function getColorRole(hex, index) {
+    const { r, g, b } = hexToRgb(hex);
+
+    const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+
+    if (index === 0 && brightness < 80) {
+        return "Background";
+    }
+
+    if (index === 0) {
+        return "Primary";
+    }
+
+    if (index === 1) {
+        return "Secondary";
+    }
+
+    if (index === 2) {
+        return "Accent";
+    }
+
+    if (index === 3) {
+        return "Highlight";
+    }
+
+    return "Supporting";
 }

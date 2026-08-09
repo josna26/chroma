@@ -4,7 +4,7 @@ import { Copy, Check } from "lucide-react";
 import "../styles/components/palette-card.css";
 
 function PaletteCard({ color, index }) {
-    const { hex, rgb, hsl } = color;
+    const { hex, rgb, hsl, role } = color;
 
     const [copied, setCopied] = useState(false);
 
@@ -33,7 +33,7 @@ function PaletteCard({ color, index }) {
 
                 <div className="color-info">
 
-                    <p>Color</p>
+                    <p>{role}</p>
 
                     <div className="color-row">
 
