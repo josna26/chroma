@@ -1,84 +1,26 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
     Copy,
     Check,
-    SlidersHorizontal,
+    Palette,
     RotateCcw
 } from "lucide-react";
 
 import {
     getContrastRating,
-    getContrastRatio
+    getContrastRatio,
+    hexToRgb,
+    rgbToHsl
 } from "../utils/colorUtils";
 
 import "../styles/components/palette-card.css";
-
-function hexToHsl(hex) {
-    const cleanHex = hex.replace("#", "");
-
-    const r = parseInt(cleanHex.slice(0, 2), 16) / 255;
-    const g = parseInt(cleanHex.slice(2, 4), 16) / 255;
-    const b = parseInt(cleanHex.slice(4, 6), 16) / 255;
-
-    const max = Math.max(r, g, b);
-    const min = Math.min(r, g, b);
-
-    let h = 0;
-    let s = 0;
-
-    const l = (max + min) / 2;
-    const difference = max - min;
-
-    if (difference !== 0) {
-        s =
-            l > 0.5
-                ? difference / (2 - max - min)
-                : difference / (max + min);
-
-        switch (max) {
-            case r:
-                h =
-                    ((g - b) / difference) +
-                    (g < b ? 6 : 0);
-                break;
-
-            case g:
-                h =
-                    ((b - r) / difference) + 2;
-                break;
-
-            case b:
-                h =
-                    ((r - g) / difference) + 4;
-                break;
-
-            default:
-                break;
-        }
-
-        h /= 6;
-    }
-
-    return {
-        h: Math.round(h * 360),
-        s: Math.round(s * 100),
-        l: Math.round(l * 100)
-    };
-}
 
 function hslToHex(h, s, l) {
     s /= 100;
     l /= 100;
 
-    const c =
-        (1 - Math.abs(2 * l - 1)) * s;
-
-    const x =
-        c * (
-            1 -
-            Math.abs((h / 60) % 2 - 1)
-        );
-
+    const c = (1 - Math.abs(2 * l - 1)) * s;
+    const x = c * (1 - Math.abs((h / 60) % 2 - 1));
     const m = l - c / 2;
 
     let r = 0;
@@ -105,7 +47,7 @@ function hslToHex(h, s, l) {
         b = x;
     }
 
-    const toHex = value =>
+    const toHex = (value) =>
         Math.round((value + m) * 255)
             .toString(16)
             .padStart(2, "0");
@@ -114,115 +56,81 @@ function hslToHex(h, s, l) {
 }
 
 function PaletteCard({ color, index, setPalette }) {
-    const {
-        hex,
-        rgb,
-        hsl,
-        role
-    } = color;
+    const { hex, rgb, hsl, role } = color;
+
+    const contrast = getContrastRatio(hex, "#0F172A");
+    const rating = getContrastRating(contrast);
+
+    const { r, g, b } = hexToRgb(hex);
+    const initialHsl = rgbToHsl(r, g, b);
 
     const [editing, setEditing] = useState(false);
+
+    const [hue, setHue] = useState(initialHsl.h);
+    const [saturation, setSaturation] = useState(initialHsl.s);
+    const [lightness, setLightness] = useState(initialHsl.l);
+
     const [copied, setCopied] = useState(false);
 
-    const [originalColor, setOriginalColor] = useState(hex);
-
-    const [hslValues, setHslValues] = useState(
-        () => hexToHsl(hex)
-    );
-
-    /*
-     * Keep the editor synchronized with
-     * the actual palette color.
-     */
-    useEffect(() => {
-        setHslValues(hexToHsl(hex));
-    }, [hex]);
-
-    const contrast =
-        getContrastRatio(hex, "#0F172A");
-
-    const rating =
-        getContrastRating(contrast);
-
-    const updatePaletteColor = newHex => {
-        setPalette(currentPalette => {
-            const updatedPalette = [...currentPalette];
-
-            updatedPalette[index] = newHex;
-
-            return updatedPalette;
-        });
-    };
-
-    const updateFromHsl = values => {
-        setHslValues(values);
-
+    const updateColor = (newHue, newSaturation, newLightness) => {
         const newHex = hslToHex(
-            values.h,
-            values.s,
-            values.l
+            newHue,
+            newSaturation,
+            newLightness
         );
 
-        updatePaletteColor(newHex);
-    };
+        setHue(newHue);
+        setSaturation(newSaturation);
+        setLightness(newLightness);
 
-    const handleHueChange = event => {
-        updateFromHsl({
-            ...hslValues,
-            h: Number(event.target.value)
-        });
-    };
-
-    const handleSaturationChange = event => {
-        updateFromHsl({
-            ...hslValues,
-            s: Number(event.target.value)
-        });
-    };
-
-    const handleLightnessChange = event => {
-        updateFromHsl({
-            ...hslValues,
-            l: Number(event.target.value)
-        });
-    };
-
-    const handleNativeColorChange = event => {
-        const newHex =
-            event.target.value.toUpperCase();
-
-        const newHsl =
-            hexToHsl(newHex);
-
-        setHslValues(newHsl);
-        updatePaletteColor(newHex);
-    };
-
-    const openEditor = event => {
-        event.stopPropagation();
-
-        setOriginalColor(hex);
-        setHslValues(hexToHsl(hex));
-        setEditing(true);
-    };
-
-    const resetColor = event => {
-        event.stopPropagation();
-
-        setHslValues(
-            hexToHsl(originalColor)
+        setPalette((currentPalette) =>
+            currentPalette.map((currentColor, currentIndex) =>
+                currentIndex === index
+                    ? newHex
+                    : currentColor
+            )
         );
-
-        updatePaletteColor(originalColor);
     };
 
-    const closeEditor = event => {
-        event.stopPropagation();
+    const handleHueChange = (event) => {
+        const value = Number(event.target.value);
 
-        setEditing(false);
+        updateColor(
+            value,
+            saturation,
+            lightness
+        );
     };
 
-    const copyColor = async event => {
+    const handleSaturationChange = (event) => {
+        const value = Number(event.target.value);
+
+        updateColor(
+            hue,
+            value,
+            lightness
+        );
+    };
+
+    const handleLightnessChange = (event) => {
+        const value = Number(event.target.value);
+
+        updateColor(
+            hue,
+            saturation,
+            value
+        );
+    };
+
+    const resetColor = () => {
+        updateColor(
+            initialHsl.h,
+            initialHsl.s,
+            initialHsl.l
+        );
+    };
+
+    const copyColor = async (event) => {
         event.stopPropagation();
 
         await navigator.clipboard.writeText(hex);
@@ -234,34 +142,37 @@ function PaletteCard({ color, index, setPalette }) {
         }, 1500);
     };
 
+    const toggleEditor = (event) => {
+        event.stopPropagation();
+        setEditing((current) => !current);
+    };
+
+    const handleDone = (event) => {
+        event.stopPropagation();
+        setEditing(false);
+    };
+
     return (
         <div
             className={`palette-card ${
                 editing ? "is-editing" : ""
             }`}
             style={{
-                animationDelay:
-                    `${index * 0.12}s`
+                animationDelay: `${index * 0.12}s`
             }}
         >
             <div className="palette-inner">
 
-                {/* COLOR PREVIEW */}
-
                 <div
                     className="color-preview"
                     style={{
-                        backgroundColor: hex
+                        background: hex
                     }}
                 />
 
                 <div className="color-info">
 
-                    {/* ROLE */}
-
                     <p>{role}</p>
-
-                    {/* HEX + COPY */}
 
                     <div className="color-row">
 
@@ -275,214 +186,206 @@ function PaletteCard({ color, index, setPalette }) {
                             {copied ? (
                                 <>
                                     <Check size={18} />
-                                    <span>
-                                        Copied!
-                                    </span>
+                                    <span>Copied!</span>
                                 </>
                             ) : (
                                 <>
                                     <Copy size={18} />
-                                    <span>
-                                        Copy
-                                    </span>
+                                    <span>Copy</span>
                                 </>
                             )}
                         </button>
 
                     </div>
 
-                    {/* RGB + HSL */}
-
                     <div className="color-details">
                         <span>{rgb}</span>
                         <span>{hsl}</span>
                     </div>
 
-                    {/* CONTRAST */}
-
                     <div className="contrast-info">
-                        <span>
-                            Contrast
-                        </span>
+
+                        <span>Contrast</span>
 
                         <strong>
                             {contrast.toFixed(2)} : 1
                         </strong>
 
                         <em
-                            className={
-                                `contrast-${rating.level}`
-                            }
+                            className={`contrast-${rating.level}`}
                         >
                             {rating.label}
                         </em>
+
                     </div>
 
-                    {/* =====================
-                        ADJUST BUTTON
-                    ===================== */}
-
-                    {!editing && (
-                        <button
-                            type="button"
-                            className="adjust-color-button"
-                            onClick={openEditor}
-                        >
-                            <SlidersHorizontal
-                                size={15}
-                            />
-
-                            Adjust color
-                        </button>
-                    )}
-
-                    {/* =====================
-                        EDITOR
-                    ===================== */}
-
-                    {editing && (
-                        <div
-                            className="color-editor"
-                            onClick={event =>
-                                event.stopPropagation()
-                            }
-                        >
-
-                            <div className="editor-header">
-
-                                <div>
-                                    <span>
-                                        COLOR ADJUSTMENT
-                                    </span>
-
-                                    <strong>
-                                        Tune this color
-                                    </strong>
-                                </div>
-
-                                <input
-                                    type="color"
-                                    value={hex}
-                                    onChange={
-                                        handleNativeColorChange
-                                    }
-                                />
-
-                            </div>
-
-                            <div className="editor-controls">
-
-                                {/* HUE */}
-
-                                <label>
-                                    <div className="slider-label">
-                                        <span>
-                                            Hue
-                                        </span>
-
-                                        <strong>
-                                            {hslValues.h}°
-                                        </strong>
-                                    </div>
-
-                                    <input
-                                        type="range"
-                                        min="0"
-                                        max="360"
-                                        value={hslValues.h}
-                                        onChange={
-                                            handleHueChange
-                                        }
-                                        className="hue-slider"
-                                    />
-                                </label>
-
-                                {/* SATURATION */}
-
-                                <label>
-                                    <div className="slider-label">
-                                        <span>
-                                            Saturation
-                                        </span>
-
-                                        <strong>
-                                            {hslValues.s}%
-                                        </strong>
-                                    </div>
-
-                                    <input
-                                        type="range"
-                                        min="0"
-                                        max="100"
-                                        value={hslValues.s}
-                                        onChange={
-                                            handleSaturationChange
-                                        }
-                                        className="saturation-slider"
-                                    />
-                                </label>
-
-                                {/* LIGHTNESS */}
-
-                                <label>
-                                    <div className="slider-label">
-                                        <span>
-                                            Lightness
-                                        </span>
-
-                                        <strong>
-                                            {hslValues.l}%
-                                        </strong>
-                                    </div>
-
-                                    <input
-                                        type="range"
-                                        min="0"
-                                        max="100"
-                                        value={hslValues.l}
-                                        onChange={
-                                            handleLightnessChange
-                                        }
-                                        className="lightness-slider"
-                                    />
-                                </label>
-
-                            </div>
-
-                            <div className="editor-footer">
-
-                                <button
-                                    type="button"
-                                    className="reset-color-button"
-                                    onClick={
-                                        resetColor
-                                    }
-                                >
-                                    <RotateCcw
-                                        size={14}
-                                    />
-
-                                    Reset
-                                </button>
-
-                                <button
-                                    type="button"
-                                    className="done-color-button"
-                                    onClick={
-                                        closeEditor
-                                    }
-                                >
-                                    Done
-                                </button>
-
-                            </div>
-
-                        </div>
-                    )}
+                    <button
+                        type="button"
+                        className="adjust-color-button"
+                        onClick={toggleEditor}
+                    >
+                        <Palette size={15} />
+                        <span>
+                            {editing
+                                ? "Close"
+                                : "Adjust"}
+                        </span>
+                    </button>
 
                 </div>
 
             </div>
+
+            {editing && (
+                <div
+                    className="color-editor"
+                    onClick={(event) =>
+                        event.stopPropagation()
+                    }
+                >
+
+                    <div className="editor-header">
+
+                        <div>
+                            <span>COLOR ADJUSTMENT</span>
+
+                            <strong>
+                                {hex}
+                            </strong>
+                        </div>
+
+                        <input
+                            type="color"
+                            value={hex}
+                            onChange={(event) => {
+                                const newHex =
+                                    event.target.value;
+
+                                const {
+                                    r,
+                                    g,
+                                    b
+                                } = hexToRgb(newHex);
+
+                                const newHsl =
+                                    rgbToHsl(r, g, b);
+
+                                updateColor(
+                                    newHsl.h,
+                                    newHsl.s,
+                                    newHsl.l
+                                );
+                            }}
+                        />
+
+                    </div>
+
+                    <div className="editor-controls">
+
+                        <label>
+
+                            <div className="slider-label">
+                                <span>Hue</span>
+
+                                <strong>
+                                    {hue}°
+                                </strong>
+                            </div>
+
+                            <input
+                                type="range"
+                                min="0"
+                                max="360"
+                                value={hue}
+                                onChange={handleHueChange}
+                                className="hue-slider"
+                            />
+
+                        </label>
+
+                        <label>
+
+                            <div className="slider-label">
+                                <span>
+                                    Saturation
+                                </span>
+
+                                <strong>
+                                    {saturation}%
+                                </strong>
+                            </div>
+
+                            <input
+                                type="range"
+                                min="0"
+                                max="100"
+                                value={saturation}
+                                onChange={
+                                    handleSaturationChange
+                                }
+                                className="saturation-slider"
+                                style={{
+                                    "--slider-color": hex
+                                }}
+                            />
+
+                        </label>
+
+                        <label>
+
+                            <div className="slider-label">
+                                <span>
+                                    Lightness
+                                </span>
+
+                                <strong>
+                                    {lightness}%
+                                </strong>
+                            </div>
+
+                            <input
+                                type="range"
+                                min="0"
+                                max="100"
+                                value={lightness}
+                                onChange={
+                                    handleLightnessChange
+                                }
+                                className="lightness-slider"
+                                style={{
+                                    "--slider-color": hex
+                                }}
+                            />
+
+                        </label>
+
+                    </div>
+
+                    <div className="editor-footer">
+
+                        <button
+                            type="button"
+                            className="reset-color-button"
+                            onClick={resetColor}
+                        >
+                            <RotateCcw size={13} />
+                            Reset
+                        </button>
+
+                        <button
+                            type="button"
+                            className="done-color-button"
+                            onClick={handleDone}
+                        >
+                            <Check size={13} />
+                            Done
+                        </button>
+
+                    </div>
+
+                </div>
+            )}
+
         </div>
     );
 }
