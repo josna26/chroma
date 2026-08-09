@@ -91,4 +91,47 @@
 .prompt-container button:disabled {
     opacity: .55;
     cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.prompt-container button:disabled:hover {
+    transform: none;
+}
+
+.prompt-container button.generating {
+    cursor: wait;
+}
+
+.spinner {
+    animation: spin .9s linear infinite;
+}
+
+.prompt-error {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    margin-top: 1rem;
+    color: #fda4af;
+    font-size: .9rem;
+    animation: fadeIn .3s ease;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

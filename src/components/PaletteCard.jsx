@@ -4,11 +4,10 @@ import { Copy, Check } from "lucide-react";
 import "../styles/components/palette-card.css";
 
 function PaletteCard({ color, index }) {
-    const { role, hex } = color;
     const [copied, setCopied] = useState(false);
 
     const copyColor = async () => {
-        await navigator.clipboard.writeText(hex);
+        await navigator.clipboard.writeText(color);
 
         setCopied(true);
 
@@ -18,46 +17,44 @@ function PaletteCard({ color, index }) {
     };
 
     return (
-        <div className="palette-card">
+        <div
+            className="palette-card"
+            style={{ animationDelay: `${index * 0.12}s` }}
+            onClick={copyColor}
+        >
             <div className="palette-inner">
+
                 <div
-                    className="palette-card"
-                    style={{ animationDelay: `${index * 0.12}s` }}
-                    onClick={copyColor}
-                >
-                    <div
-                        className="color-preview"
-                        style={{ background: hex }}
-                    ></div>
+                    className="color-preview"
+                    style={{ background: color }}
+                ></div>
 
-                    <div className="color-info">
+                <div className="color-info">
 
-                        <p>{role}</p>
+                    <p>Color</p>
 
-                        <div className="color-row">
+                    <div className="color-row">
 
-                            <h3>{hex}</h3>
+                        <h3>{color}</h3>
 
-                            <div className="copy-status">
-                                {copied ? (
-                                    <>
-                                        <Check size={18} />
-                                        <span>Copied!</span>
-                                    </>
-                                ) : (
-                                    <>
-                                        <Copy size={18} />
-                                        <span>Copy</span>
-                                    </>
-                                )}
-                            </div>
-
+                        <div className="copy-status">
+                            {copied ? (
+                                <>
+                                    <Check size={18} />
+                                    <span>Copied!</span>
+                                </>
+                            ) : (
+                                <>
+                                    <Copy size={18} />
+                                    <span>Copy</span>
+                                </>
+                            )}
                         </div>
 
                     </div>
+
                 </div>
             </div>
-
         </div>
     );
 }
