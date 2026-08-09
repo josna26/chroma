@@ -3,9 +3,20 @@ import { useState } from "react";
 
 import "../styles/components/prompt-section.css";
 import { examplePrompts } from "../constants/prompts";
+import { generatePalette } from "../services/gemini";
 
 function PromptSection() {
     const [prompt, setPrompt] = useState("");
+
+    const handleGenerate = async () => {
+        if (!prompt.trim()) return;
+        try {
+            const colors = await generatePalette(prompt);
+            console.log(colors);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     return (
         <section id="prompt-section" className="prompt-section">
@@ -35,7 +46,10 @@ function PromptSection() {
                     ))}
                 </div>
 
-                <button>
+                <button
+                    onClick={handleGenerate}
+                    disabled={!prompt.trim()}
+                >
                     <Sparkles size={18} />
                     Generate Palette
                 </button>

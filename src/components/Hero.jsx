@@ -20,9 +20,10 @@ function Hero() {
         </h1>
 
         <p className="subtitle">
-          Describe your idea and let AI create stunning,
-          harmonious color palettes for your next design,
-          website, artwork or brand.
+          Describe an idea, mood, or scene.
+          Chroma transforms it into beautiful,
+          production-ready color palettes that
+          you can preview, refine, and export.
         </p>
 
         <div className="prompt-box">

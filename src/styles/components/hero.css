@@ -27,7 +27,10 @@
 .hero-content {
     width: 100%;
     max-width: 900px;
+    display: flex;
+    flex-direction: column;
     text-align: center;
+    align-items: center;
     position: relative;
     z-index: 10;
 }
@@ -83,7 +86,7 @@
 .hero-btn:hover {
     transform: translateY(-3px);
     box-shadow:
-        0 10px 25px rgba(124, 58, 237, .35);
+        0 12px 30px rgba(124, 58, 237, .35);
 }
 
 .hero-btn:active {
@@ -99,22 +102,6 @@
 
     50% {
         transform: translateY(-35px);
-    }
-
-}
-
-@media(max-width:768px) {
-
-    .hero h1 {
-        font-size: 2.8rem;
-    }
-
-    .prompt-box {
-        flex-direction: column;
-    }
-
-    .prompt-box button {
-        width: 100%;
     }
 
 }

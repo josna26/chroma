@@ -83,7 +83,12 @@
     transition: .3s;
 }
 
-.prompt-container button:hover {
+.prompt-container button:not(:disabled):hover {
     transform: translateY(-3px);
     box-shadow: 0 15px 30px rgba(124, 58, 237, .35);
+}
+
+.prompt-container button:disabled {
+    opacity: .55;
+    cursor: not-allowed;
 }
