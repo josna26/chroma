@@ -341,120 +341,358 @@
 
 }
 
+/* ============================= */
+/* TOKEN PLAYGROUND */
+/* ============================= */
+
 .tokens-playground {
     min-height: 540px;
+
     padding: 2rem;
-    border: 1px solid rgba(255, 255, 255, .08);
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 26px;
-    background: rgba(255, 255, 255, .03);
+
+    background: rgba(255, 255, 255, 0.03);
 }
+
+
+/* ============================= */
+/* HEADER */
+/* ============================= */
 
 .tokens-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 1rem;
+
+    gap: 1.5rem;
+
     margin-bottom: 1.5rem;
 }
 
-.tokens-header > div > span {
-    font-size: .65rem;
-    font-weight: 700;
-    letter-spacing: 1.4px;
+.tokens-header > div:first-child {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.tokens-header > div:first-child > span {
     color: #8b5cf6;
+
+    font-size: 0.65rem;
+    font-weight: 700;
+
+    letter-spacing: 1.4px;
 }
 
 .tokens-header h3 {
-    margin-top: .4rem;
+    margin: 0;
+
     font-size: 1.5rem;
+    line-height: 1.2;
 }
 
-.tokens-header button {
-    border: 1px solid rgba(255, 255, 255, .12);
-    padding: .65rem 1rem;
-    border-radius: 10px;
-    background: rgba(255, 255, 255, .06);
-    color: white;
-    font-size: .75rem;
-    transition: .3s;
+
+/* ============================= */
+/* FORMAT SWITCHER */
+/* ============================= */
+
+.token-format-tabs {
+    display: flex;
+    align-items: center;
+
+    gap: 0.25rem;
+
+    padding: 0.25rem;
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 11px;
+
+    background: rgba(255, 255, 255, 0.035);
 }
 
-.tokens-header button:hover {
-    background: rgba(255, 255, 255, .1);
+.token-format-tabs button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 48px;
+
+    border: none;
+    border-radius: 8px;
+
+    padding: 0.45rem 0.7rem;
+
+    background: transparent;
+    color: #64748b;
+
+    font-size: 0.65rem;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
 }
+
+.token-format-tabs button:hover {
+    color: #e2e8f0;
+}
+
+.token-format-tabs button.active {
+    background: rgba(255, 255, 255, 0.09);
+    color: #ffffff;
+}
+
+.token-format-tabs button:active {
+    transform: scale(0.96);
+}
+
+
+/* ============================= */
+/* CODE BLOCK */
+/* ============================= */
 
 .token-code {
     overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, .08);
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 16px;
+
     background: #090b12;
+
+    box-shadow:
+        0 15px 35px rgba(0, 0, 0, 0.18);
 }
+
+
+/* Code header */
 
 .code-header {
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    padding: .7rem 1rem;
-    border-bottom: 1px solid rgba(255, 255, 255, .08);
+
+    min-height: 42px;
+
+    padding: 0.6rem 0.9rem;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
     color: #64748b;
-    font-size: .7rem;
+
+    font-size: 0.7rem;
 }
+
+.code-header > span {
+    font-family: monospace;
+    letter-spacing: 0.2px;
+}
+
+
+/* Copy button */
+
+.code-header button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 7px;
+
+    padding: 0.35rem 0.55rem;
+
+    background: rgba(255, 255, 255, 0.025);
+    color: #94a3b8;
+
+    font-size: 0.65rem;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.code-header button:hover {
+    background: rgba(255, 255, 255, 0.07);
+
+    border-color: rgba(255, 255, 255, 0.12);
+
+    color: #ffffff;
+}
+
+
+/* Code */
 
 .token-code pre {
     margin: 0;
+
+    max-height: 230px;
+
     padding: 1.2rem;
+
     overflow-x: auto;
+    overflow-y: auto;
+
     color: #cbd5e1;
+
     font-family: monospace;
-    font-size: .8rem;
+    font-size: 0.8rem;
+
     line-height: 1.8;
+
+    scrollbar-width: thin;
 }
+
+.token-code code {
+    font-family: inherit;
+}
+
+
+/* ============================= */
+/* TOKEN LIST */
+/* ============================= */
 
 .token-list {
     display: grid;
+
     grid-template-columns: repeat(2, 1fr);
-    gap: .7rem;
+
+    gap: 0.7rem;
+
     margin-top: 1rem;
 }
 
 .token-item {
     display: flex;
     align-items: center;
-    gap: .8rem;
-    padding: .8rem;
-    border: 1px solid rgba(255, 255, 255, .07);
+
+    gap: 0.8rem;
+
+    padding: 0.8rem;
+
+    border: 1px solid rgba(255, 255, 255, 0.07);
     border-radius: 13px;
-    background: rgba(255, 255, 255, .025);
+
+    background: rgba(255, 255, 255, 0.025);
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.token-item:hover {
+    background: rgba(255, 255, 255, 0.045);
+
+    border-color: rgba(255, 255, 255, 0.12);
+
+    transform: translateY(-2px);
 }
 
 .token-swatch {
     width: 32px;
     height: 32px;
+
     flex-shrink: 0;
+
     border-radius: 9px;
+
+    box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.12);
 }
 
 .token-info {
     display: flex;
     flex: 1;
+
     flex-direction: column;
-    gap: .2rem;
+
+    gap: 0.2rem;
+
+    min-width: 0;
 }
 
 .token-info span {
-    font-size: .75rem;
+    overflow: hidden;
+
     color: #cbd5e1;
+
+    font-size: 0.75rem;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .token-info strong {
-    font-family: monospace;
-    font-size: .65rem;
     color: #64748b;
+
+    font-family: monospace;
+
+    font-size: 0.65rem;
 }
 
-.token-item code {
-    font-size: .7rem;
-    color: #94a3b8;
+
+/* ============================= */
+/* DOWNLOAD */
+/* ============================= */
+
+.download-tokens {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 0.4rem;
+
+    width: 100%;
+
+    margin-top: 1rem;
+
+    padding: 0.7rem 1rem;
+
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+
+    background: rgba(255, 255, 255, 0.045);
+
+    color: #cbd5e1;
+
+    font-size: 0.7rem;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
 }
+
+.download-tokens:hover {
+    background: rgba(255, 255, 255, 0.08);
+
+    border-color: rgba(255, 255, 255, 0.16);
+
+    color: #ffffff;
+
+    transform: translateY(-1px);
+}
+
+.download-tokens:active {
+    transform: scale(0.99);
+}
+
+
+/* ============================= */
+/* RESPONSIVE */
+/* ============================= */
 
 @media (max-width: 600px) {
 
@@ -464,11 +702,23 @@
 
     .tokens-header {
         align-items: flex-start;
+
         flex-direction: column;
+    }
+
+    .token-format-tabs {
+        width: 100%;
+    }
+
+    .token-format-tabs button {
+        flex: 1;
     }
 
     .token-list {
         grid-template-columns: 1fr;
     }
 
+    .token-code pre {
+        font-size: 0.72rem;
+    }
 }

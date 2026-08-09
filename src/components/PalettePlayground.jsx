@@ -1,10 +1,14 @@
 import { useState } from "react";
+import { Copy, Check, Download } from "lucide-react";
 
 import "../styles/components/palette-playground.css";
 import { getColorDetails, findBestContrastPair } from "../utils/colorUtils";
+import { generateCSS, generateJSON, generateTailwind } from "../utils/exportUtils";
 
 function PalettePlayground({ palette, setPalette }) {
     const [activeTab, setActiveTab] = useState("preview");
+    const [format, setFormat] = useState("css");
+    const [copied, setCopied] = useState(false);
 
     if (!palette.length) {
         return null;
@@ -35,6 +39,64 @@ function PalettePlayground({ palette, setPalette }) {
     )?.hex;
 
     const bestPair = findBestContrastPair(palette);
+
+    const output =
+        format === "css"
+            ? generateCSS(colorDetails)
+            : format === "json"
+                ? generateJSON(colorDetails)
+                : generateTailwind(colorDetails);
+
+    const copyOutput = async () => {
+        await navigator.clipboard.writeText(output);
+
+        setCopied(true);
+
+        setTimeout(() => {
+            setCopied(false);
+        }, 1500);
+    };
+
+    const downloadOutput = () => {
+        const extension =
+            format === "css"
+                ? "css"
+                : format === "json"
+                    ? "json"
+                    : "js";
+
+        const filename =
+            format === "css"
+                ? "palette.css"
+                : format === "json"
+                    ? "palette.json"
+                    : "tailwind.config.js";
+
+        const mimeType =
+            format === "json"
+                ? "application/json"
+                : format === "css"
+                    ? "text/css"
+                    : "text/javascript";
+
+        const blob = new Blob(
+            [output],
+            { type: mimeType }
+        );
+
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+
+        link.href = url;
+        link.download = filename;
+
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        URL.revokeObjectURL(url);
+    };
 
     return (
         <section className="palette-playground">
@@ -96,6 +158,10 @@ function PalettePlayground({ palette, setPalette }) {
             </div>
 
             <div className="playground-content">
+
+                {/* ============================= */}
+                {/* UI PREVIEW */}
+                {/* ============================= */}
 
                 {activeTab === "preview" && (
                     <div
@@ -213,6 +279,10 @@ function PalettePlayground({ palette, setPalette }) {
                     </div>
                 )}
 
+                {/* ============================= */}
+                {/* CONTRAST */}
+                {/* ============================= */}
+
                 {activeTab === "contrast" && bestPair && (
                     <div
                         className="contrast-playground"
@@ -252,6 +322,7 @@ function PalettePlayground({ palette, setPalette }) {
 
                                 <div>
                                     <span>Background</span>
+
                                     <strong>
                                         {bestPair.background}
                                     </strong>
@@ -259,6 +330,7 @@ function PalettePlayground({ palette, setPalette }) {
 
                                 <div>
                                     <span>Foreground</span>
+
                                     <strong>
                                         {bestPair.foreground}
                                     </strong>
@@ -267,7 +339,10 @@ function PalettePlayground({ palette, setPalette }) {
                             </div>
 
                             <div className="contrast-status">
-                                <span>WCAG Contrast</span>
+
+                                <span>
+                                    WCAG Contrast
+                                </span>
 
                                 <strong>
                                     {bestPair.ratio >= 7
@@ -276,77 +351,167 @@ function PalettePlayground({ palette, setPalette }) {
                                             ? "AA"
                                             : "Poor"}
                                 </strong>
+
                             </div>
 
                         </div>
                     </div>
                 )}
 
+                {/* ============================= */}
+                {/* COLOR TOKENS */}
+                {/* ============================= */}
+
                 {activeTab === "tokens" && (
                     <div className="tokens-playground">
 
                         <div className="tokens-header">
+
                             <div>
-                                <span>DESIGN TOKENS</span>
-                                <h3>Your palette, ready to use.</h3>
+                                <span>
+                                    DESIGN TOKENS
+                                </span>
+
+                                <h3>
+                                    Your palette, ready to use.
+                                </h3>
                             </div>
 
-                            <button>
-                                Copy CSS
-                            </button>
+                            <div className="token-format-tabs">
+
+                                <button
+                                    className={
+                                        format === "css"
+                                            ? "active"
+                                            : ""
+                                    }
+                                    onClick={() => {
+                                        setFormat("css");
+                                        setCopied(false);
+                                    }}
+                                >
+                                    CSS
+                                </button>
+
+                                <button
+                                    className={
+                                        format === "json"
+                                            ? "active"
+                                            : ""
+                                    }
+                                    onClick={() => {
+                                        setFormat("json");
+                                        setCopied(false);
+                                    }}
+                                >
+                                    JSON
+                                </button>
+
+                                <button
+                                    className={
+                                        format === "tailwind"
+                                            ? "active"
+                                            : ""
+                                    }
+                                    onClick={() => {
+                                        setFormat("tailwind");
+                                        setCopied(false);
+                                    }}
+                                >
+                                    Tailwind
+                                </button>
+
+                            </div>
+
                         </div>
 
                         <div className="token-code">
+
                             <div className="code-header">
-                                <span>:root</span>
-                                <span>CSS</span>
+
+                                <span>
+                                    {format === "css"
+                                        ? "palette.css"
+                                        : format === "json"
+                                            ? "palette.json"
+                                            : "tailwind.config.js"}
+                                </span>
+
+                                <button
+                                    onClick={copyOutput}
+                                >
+                                    {copied ? (
+                                        <>
+                                            <Check size={14} />
+                                            Copied
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Copy size={14} />
+                                            Copy
+                                        </>
+                                    )}
+                                </button>
+
                             </div>
 
                             <pre>
-                {`:root {
-                    --background: ${background};
-                    --primary: ${primary};
-                    --accent: ${accent};
-                    --secondary: ${secondary};
-                    --highlight: ${highlight};
-                }`}
+                                <code>
+                                    {output}
+                                </code>
                             </pre>
+
                         </div>
 
                         <div className="token-list">
 
-                            {[
-                                ["Background", background],
-                                ["Primary", primary],
-                                ["Accent", accent],
-                                ["Secondary", secondary],
-                                ["Highlight", highlight]
-                            ].map(([role, color]) => (
+                            {colorDetails.map((color) => (
+
                                 <div
-                                    key={role}
                                     className="token-item"
+                                    key={color.hex}
                                 >
+
                                     <div
                                         className="token-swatch"
                                         style={{
-                                            backgroundColor: color
+                                            backgroundColor: color.hex
                                         }}
                                     />
 
                                     <div className="token-info">
-                                        <span>{role}</span>
+
+                                        <span>
+                                            {color.role}
+                                        </span>
+
                                         <strong>
-                                            --{role.toLowerCase()}
+                                            --{color.role
+                                                .toLowerCase()
+                                                .replace(/\s+/g, "-")}
                                         </strong>
+
                                     </div>
 
                                     <code>
-                                        {color}
+                                        {color.hex}
                                     </code>
+
                                 </div>
+
                             ))}
 
                         </div>
+
+                        <button
+                            className="download-tokens"
+                            onClick={downloadOutput}
+                        >
+                            <Download size={15} />
+
+                            Download{" "}
+                            {format.toUpperCase()} file
+                        </button>
 
                     </div>
                 )}

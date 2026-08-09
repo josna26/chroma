@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {
     Copy,
     Check,
@@ -58,21 +58,41 @@ function hslToHex(h, s, l) {
 function PaletteCard({ color, index, setPalette }) {
     const { hex, rgb, hsl, role } = color;
 
-    const contrast = getContrastRatio(hex, "#0F172A");
-    const rating = getContrastRating(contrast);
+    /*
+     * Capture the original generated color once.
+     * This is what Reset should return to.
+     */
+    const originalHex = useRef(hex);
 
     const { r, g, b } = hexToRgb(hex);
     const initialHsl = rgbToHsl(r, g, b);
 
+    const originalHsl = useRef(initialHsl);
+
+    const contrast = getContrastRatio(hex, "#0F172A");
+    const rating = getContrastRating(contrast);
+
     const [editing, setEditing] = useState(false);
 
-    const [hue, setHue] = useState(initialHsl.h);
-    const [saturation, setSaturation] = useState(initialHsl.s);
-    const [lightness, setLightness] = useState(initialHsl.l);
+    const [hue, setHue] = useState(
+        originalHsl.current.h
+    );
+
+    const [saturation, setSaturation] = useState(
+        originalHsl.current.s
+    );
+
+    const [lightness, setLightness] = useState(
+        originalHsl.current.l
+    );
 
     const [copied, setCopied] = useState(false);
 
-    const updateColor = (newHue, newSaturation, newLightness) => {
+    const updateColor = (
+        newHue,
+        newSaturation,
+        newLightness
+    ) => {
         const newHex = hslToHex(
             newHue,
             newSaturation,
@@ -84,10 +104,11 @@ function PaletteCard({ color, index, setPalette }) {
         setLightness(newLightness);
 
         setPalette((currentPalette) =>
-            currentPalette.map((currentColor, currentIndex) =>
-                currentIndex === index
-                    ? newHex
-                    : currentColor
+            currentPalette.map(
+                (currentColor, currentIndex) =>
+                    currentIndex === index
+                        ? newHex
+                        : currentColor
             )
         );
     };
@@ -123,10 +144,30 @@ function PaletteCard({ color, index, setPalette }) {
     };
 
     const resetColor = () => {
-        updateColor(
-            initialHsl.h,
-            initialHsl.s,
-            initialHsl.l
+        /*
+         * Restore the exact original HEX.
+         */
+        const originalColor = originalHex.current;
+
+        const {
+            r,
+            g,
+            b
+        } = hexToRgb(originalColor);
+
+        const resetHsl = rgbToHsl(r, g, b);
+
+        setHue(resetHsl.h);
+        setSaturation(resetHsl.s);
+        setLightness(resetHsl.l);
+
+        setPalette((currentPalette) =>
+            currentPalette.map(
+                (currentColor, currentIndex) =>
+                    currentIndex === index
+                        ? originalColor
+                        : currentColor
+            )
         );
     };
 
@@ -144,11 +185,13 @@ function PaletteCard({ color, index, setPalette }) {
 
     const toggleEditor = (event) => {
         event.stopPropagation();
+
         setEditing((current) => !current);
     };
 
     const handleDone = (event) => {
         event.stopPropagation();
+
         setEditing(false);
     };
 
@@ -186,12 +229,16 @@ function PaletteCard({ color, index, setPalette }) {
                             {copied ? (
                                 <>
                                     <Check size={18} />
-                                    <span>Copied!</span>
+                                    <span>
+                                        Copied!
+                                    </span>
                                 </>
                             ) : (
                                 <>
                                     <Copy size={18} />
-                                    <span>Copy</span>
+                                    <span>
+                                        Copy
+                                    </span>
                                 </>
                             )}
                         </button>
@@ -199,13 +246,22 @@ function PaletteCard({ color, index, setPalette }) {
                     </div>
 
                     <div className="color-details">
-                        <span>{rgb}</span>
-                        <span>{hsl}</span>
+
+                        <span>
+                            {rgb}
+                        </span>
+
+                        <span>
+                            {hsl}
+                        </span>
+
                     </div>
 
                     <div className="contrast-info">
 
-                        <span>Contrast</span>
+                        <span>
+                            Contrast
+                        </span>
 
                         <strong>
                             {contrast.toFixed(2)} : 1
@@ -225,6 +281,7 @@ function PaletteCard({ color, index, setPalette }) {
                         onClick={toggleEditor}
                     >
                         <Palette size={15} />
+
                         <span>
                             {editing
                                 ? "Close"
@@ -247,17 +304,22 @@ function PaletteCard({ color, index, setPalette }) {
                     <div className="editor-header">
 
                         <div>
-                            <span>COLOR ADJUSTMENT</span>
+
+                            <span>
+                                COLOR ADJUSTMENT
+                            </span>
 
                             <strong>
                                 {hex}
                             </strong>
+
                         </div>
 
                         <input
                             type="color"
                             value={hex}
                             onChange={(event) => {
+
                                 const newHex =
                                     event.target.value;
 
@@ -268,7 +330,11 @@ function PaletteCard({ color, index, setPalette }) {
                                 } = hexToRgb(newHex);
 
                                 const newHsl =
-                                    rgbToHsl(r, g, b);
+                                    rgbToHsl(
+                                        r,
+                                        g,
+                                        b
+                                    );
 
                                 updateColor(
                                     newHsl.h,
@@ -285,11 +351,15 @@ function PaletteCard({ color, index, setPalette }) {
                         <label>
 
                             <div className="slider-label">
-                                <span>Hue</span>
+
+                                <span>
+                                    Hue
+                                </span>
 
                                 <strong>
                                     {hue}°
                                 </strong>
+
                             </div>
 
                             <input
@@ -297,7 +367,9 @@ function PaletteCard({ color, index, setPalette }) {
                                 min="0"
                                 max="360"
                                 value={hue}
-                                onChange={handleHueChange}
+                                onChange={
+                                    handleHueChange
+                                }
                                 className="hue-slider"
                             />
 
@@ -306,6 +378,7 @@ function PaletteCard({ color, index, setPalette }) {
                         <label>
 
                             <div className="slider-label">
+
                                 <span>
                                     Saturation
                                 </span>
@@ -313,6 +386,7 @@ function PaletteCard({ color, index, setPalette }) {
                                 <strong>
                                     {saturation}%
                                 </strong>
+
                             </div>
 
                             <input
@@ -334,6 +408,7 @@ function PaletteCard({ color, index, setPalette }) {
                         <label>
 
                             <div className="slider-label">
+
                                 <span>
                                     Lightness
                                 </span>
@@ -341,6 +416,7 @@ function PaletteCard({ color, index, setPalette }) {
                                 <strong>
                                     {lightness}%
                                 </strong>
+
                             </div>
 
                             <input
@@ -369,6 +445,7 @@ function PaletteCard({ color, index, setPalette }) {
                             onClick={resetColor}
                         >
                             <RotateCcw size={13} />
+
                             Reset
                         </button>
 
@@ -378,6 +455,7 @@ function PaletteCard({ color, index, setPalette }) {
                             onClick={handleDone}
                         >
                             <Check size={13} />
+
                             Done
                         </button>
 
