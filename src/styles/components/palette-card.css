@@ -137,6 +137,46 @@
     letter-spacing: .2px;
 }
 
+.contrast-info {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    margin-top: .7rem;
+    padding-top: .7rem;
+    border-top: 1px solid rgba(255, 255, 255, .08);
+    font-size: .75rem;
+}
+
+.contrast-info span {
+    color: #64748b;
+}
+
+.contrast-info strong {
+    color: #cbd5e1;
+    font-family: monospace;
+}
+
+.contrast-info em {
+    font-style: normal;
+    font-weight: 600;
+}
+
+.contrast-excellent {
+    color: #4ade80;
+}
+
+.contrast-good {
+    color: #a3e635;
+}
+
+.contrast-fair {
+    color: #facc15;
+}
+
+.contrast-poor {
+    color: #fb7185;
+}
+
 @keyframes fadeUp {
 
     from {

@@ -98,3 +98,72 @@ export function getColorRole(hex, index) {
 
     return "Supporting";
 }
+
+function getLuminance(r, g, b) {
+    const values = [r, g, b].map((value) => {
+        const channel = value / 255;
+
+        return channel <= 0.03928
+            ? channel / 12.92
+            : Math.pow(
+                (channel + 0.055) / 1.055,
+                2.4
+            );
+    });
+
+    return (
+        0.2126 * values[0] +
+        0.7152 * values[1] +
+        0.0722 * values[2]
+    );
+}
+
+export function getContrastRatio(hex1, hex2) {
+    const color1 = hexToRgb(hex1);
+    const color2 = hexToRgb(hex2);
+
+    const luminance1 = getLuminance(
+        color1.r,
+        color1.g,
+        color1.b
+    );
+
+    const luminance2 = getLuminance(
+        color2.r,
+        color2.g,
+        color2.b
+    );
+
+    const lighter = Math.max(luminance1, luminance2);
+    const darker = Math.min(luminance1, luminance2);
+
+    return (lighter + 0.05) / (darker + 0.05);
+}
+
+export function getContrastRating(ratio) {
+    if (ratio >= 7) {
+        return {
+            label: "AAA",
+            level: "excellent"
+        };
+    }
+
+    if (ratio >= 4.5) {
+        return {
+            label: "AA",
+            level: "good"
+        };
+    }
+
+    if (ratio >= 3) {
+        return {
+            label: "AA Large",
+            level: "fair"
+        };
+    }
+
+    return {
+        label: "Poor",
+        level: "poor"
+    };
+}
