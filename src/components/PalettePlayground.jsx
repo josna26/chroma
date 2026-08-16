@@ -1,9 +1,23 @@
 import { useState } from "react";
-import { Copy, Check, Download } from "lucide-react";
+import {
+    Copy,
+    Check,
+    Download
+} from "lucide-react";
 
 import "../styles/components/palette-playground.css";
-import { getColorDetails, findBestContrastPair } from "../utils/colorUtils";
-import { generateCSS, generateJSON, generateTailwind } from "../utils/exportUtils";
+
+import {
+    getColorDetails,
+    findBestContrastPair
+} from "../utils/colorUtils";
+
+import {
+    generateCSS,
+    generateJSON,
+    generateTailwind,
+    generateSVG
+} from "../utils/exportUtils";
 
 function PalettePlayground({ palette, setPalette }) {
     const [activeTab, setActiveTab] = useState("preview");
@@ -19,23 +33,23 @@ function PalettePlayground({ palette, setPalette }) {
     );
 
     const background = colorDetails.find(
-        color => color.role === "Background"
+        (color) => color.role === "Background"
     )?.hex;
 
     const primary = colorDetails.find(
-        color => color.role === "Primary"
+        (color) => color.role === "Primary"
     )?.hex;
 
     const secondary = colorDetails.find(
-        color => color.role === "Secondary"
+        (color) => color.role === "Secondary"
     )?.hex;
 
     const accent = colorDetails.find(
-        color => color.role === "Accent"
+        (color) => color.role === "Accent"
     )?.hex;
 
     const highlight = colorDetails.find(
-        color => color.role === "Highlight"
+        (color) => color.role === "Highlight"
     )?.hex;
 
     const bestPair = findBestContrastPair(palette);
@@ -45,43 +59,68 @@ function PalettePlayground({ palette, setPalette }) {
             ? generateCSS(colorDetails)
             : format === "json"
                 ? generateJSON(colorDetails)
-                : generateTailwind(colorDetails);
+                : format === "tailwind"
+                    ? generateTailwind(colorDetails)
+                    : generateSVG(colorDetails);
+
+    const getFilename = () => {
+        switch (format) {
+            case "css":
+                return "palette.css";
+
+            case "json":
+                return "palette.json";
+
+            case "tailwind":
+                return "tailwind.config.js";
+
+            case "svg":
+                return "palette.svg";
+
+            default:
+                return "palette.txt";
+        }
+    };
+
+    const getMimeType = () => {
+        switch (format) {
+            case "css":
+                return "text/css";
+
+            case "json":
+                return "application/json";
+
+            case "tailwind":
+                return "text/javascript";
+
+            case "svg":
+                return "image/svg+xml";
+
+            default:
+                return "text/plain";
+        }
+    };
 
     const copyOutput = async () => {
-        await navigator.clipboard.writeText(output);
+        try {
+            await navigator.clipboard.writeText(output);
 
-        setCopied(true);
+            setCopied(true);
 
-        setTimeout(() => {
-            setCopied(false);
-        }, 1500);
+            setTimeout(() => {
+                setCopied(false);
+            }, 1500);
+        } catch (error) {
+            console.error("Failed to copy:", error);
+        }
     };
 
     const downloadOutput = () => {
-        const extension =
-            format === "css"
-                ? "css"
-                : format === "json"
-                    ? "json"
-                    : "js";
-
-        const filename =
-            format === "css"
-                ? "palette.css"
-                : format === "json"
-                    ? "palette.json"
-                    : "tailwind.config.js";
-
-        const mimeType =
-            format === "json"
-                ? "application/json"
-                : format === "css"
-                    ? "text/css"
-                    : "text/javascript";
-
         const blob = new Blob(
             [output],
-            { type: mimeType }
+            {
+                type: getMimeType()
+            }
         );
 
         const url = URL.createObjectURL(blob);
@@ -89,13 +128,20 @@ function PalettePlayground({ palette, setPalette }) {
         const link = document.createElement("a");
 
         link.href = url;
-        link.download = filename;
+        link.download = getFilename();
 
         document.body.appendChild(link);
+
         link.click();
+
         document.body.removeChild(link);
 
         URL.revokeObjectURL(url);
+    };
+
+    const handleFormatChange = (newFormat) => {
+        setFormat(newFormat);
+        setCopied(false);
     };
 
     return (
@@ -104,6 +150,7 @@ function PalettePlayground({ palette, setPalette }) {
             <div className="playground-header">
 
                 <div>
+
                     <span className="playground-label">
                         Palette Playground
                     </span>
@@ -116,6 +163,7 @@ function PalettePlayground({ palette, setPalette }) {
                         Explore how your generated colors work
                         together in different design contexts.
                     </p>
+
                 </div>
 
                 <div className="playground-tabs">
@@ -126,7 +174,9 @@ function PalettePlayground({ palette, setPalette }) {
                                 ? "active"
                                 : ""
                         }
-                        onClick={() => setActiveTab("preview")}
+                        onClick={() =>
+                            setActiveTab("preview")
+                        }
                     >
                         UI Preview
                     </button>
@@ -137,7 +187,9 @@ function PalettePlayground({ palette, setPalette }) {
                                 ? "active"
                                 : ""
                         }
-                        onClick={() => setActiveTab("contrast")}
+                        onClick={() =>
+                            setActiveTab("contrast")
+                        }
                     >
                         Contrast
                     </button>
@@ -148,7 +200,9 @@ function PalettePlayground({ palette, setPalette }) {
                                 ? "active"
                                 : ""
                         }
-                        onClick={() => setActiveTab("tokens")}
+                        onClick={() =>
+                            setActiveTab("tokens")
+                        }
                     >
                         Color Tokens
                     </button>
@@ -157,6 +211,7 @@ function PalettePlayground({ palette, setPalette }) {
 
             </div>
 
+
             <div className="playground-content">
 
                 {/* ============================= */}
@@ -164,6 +219,7 @@ function PalettePlayground({ palette, setPalette }) {
                 {/* ============================= */}
 
                 {activeTab === "preview" && (
+
                     <div
                         className="ui-preview"
                         style={{
@@ -175,7 +231,8 @@ function PalettePlayground({ palette, setPalette }) {
                         <div
                             className="preview-nav"
                             style={{
-                                borderColor: `${highlight}33`
+                                borderColor:
+                                    `${highlight}33`
                             }}
                         >
 
@@ -184,20 +241,30 @@ function PalettePlayground({ palette, setPalette }) {
                             </strong>
 
                             <div>
-                                <span>Explore</span>
-                                <span>About</span>
+
+                                <span>
+                                    Explore
+                                </span>
+
+                                <span>
+                                    About
+                                </span>
 
                                 <button
                                     style={{
-                                        backgroundColor: primary,
-                                        color: background
+                                        backgroundColor:
+                                            primary,
+                                        color:
+                                            background
                                     }}
                                 >
                                     Create
                                 </button>
+
                             </div>
 
                         </div>
+
 
                         <div className="preview-hero">
 
@@ -227,8 +294,10 @@ function PalettePlayground({ palette, setPalette }) {
                             <button
                                 className="preview-main-button"
                                 style={{
-                                    backgroundColor: primary,
-                                    color: background
+                                    backgroundColor:
+                                        primary,
+                                    color:
+                                        background
                                 }}
                             >
                                 Explore Palette
@@ -236,25 +305,30 @@ function PalettePlayground({ palette, setPalette }) {
 
                         </div>
 
+
                         <div className="preview-cards">
 
                             {[primary, accent, highlight].map(
                                 (color, index) => (
+
                                     <div
-                                        key={color}
+                                        key={`${color}-${index}`}
                                         className="preview-card"
                                         style={{
-                                            backgroundColor: `${color}18`,
-                                            borderColor: `${color}55`
+                                            backgroundColor:
+                                                `${color}18`,
+                                            borderColor:
+                                                `${color}55`
                                         }}
                                     >
 
                                         <div
                                             className="preview-dot"
                                             style={{
-                                                backgroundColor: color
+                                                backgroundColor:
+                                                    color
                                             }}
-                                        ></div>
+                                        />
 
                                         <span>
                                             {
@@ -271,103 +345,125 @@ function PalettePlayground({ palette, setPalette }) {
                                         </strong>
 
                                     </div>
+
                                 )
                             )}
 
                         </div>
 
                     </div>
+
                 )}
+
 
                 {/* ============================= */}
                 {/* CONTRAST */}
                 {/* ============================= */}
 
-                {activeTab === "contrast" && bestPair && (
-                    <div
-                        className="contrast-playground"
-                        style={{
-                            backgroundColor: bestPair.background,
-                            color: bestPair.foreground
-                        }}
-                    >
-                        <div className="contrast-content">
+                {activeTab === "contrast" &&
+                    bestPair && (
 
-                            <span className="contrast-label">
-                                Best Contrast Pair
-                            </span>
+                        <div
+                            className="contrast-playground"
+                            style={{
+                                backgroundColor:
+                                    bestPair.background,
+                                color:
+                                    bestPair.foreground
+                            }}
+                        >
 
-                            <h3>
-                                Designed to work together.
-                            </h3>
+                            <div className="contrast-content">
 
-                            <p>
-                                This pairing provides the strongest contrast
-                                within your generated palette.
-                            </p>
-
-                            <div className="contrast-preview-box">
-
-                                <span>
-                                    Aa
+                                <span className="contrast-label">
+                                    Best Contrast Pair
                                 </span>
 
-                                <strong>
-                                    {bestPair.ratio.toFixed(2)} : 1
-                                </strong>
+                                <h3>
+                                    Designed to work together.
+                                </h3>
 
-                            </div>
+                                <p>
+                                    This pairing provides the strongest
+                                    contrast within your generated palette.
+                                </p>
 
-                            <div className="contrast-values">
+                                <div className="contrast-preview-box">
 
-                                <div>
-                                    <span>Background</span>
-
-                                    <strong>
-                                        {bestPair.background}
-                                    </strong>
-                                </div>
-
-                                <div>
-                                    <span>Foreground</span>
+                                    <span>
+                                        Aa
+                                    </span>
 
                                     <strong>
-                                        {bestPair.foreground}
+                                        {bestPair.ratio.toFixed(2)}
+                                        {" : 1"}
                                     </strong>
+
                                 </div>
 
-                            </div>
+                                <div className="contrast-values">
 
-                            <div className="contrast-status">
+                                    <div>
 
-                                <span>
-                                    WCAG Contrast
-                                </span>
+                                        <span>
+                                            Background
+                                        </span>
 
-                                <strong>
-                                    {bestPair.ratio >= 7
-                                        ? "AAA"
-                                        : bestPair.ratio >= 4.5
-                                            ? "AA"
-                                            : "Poor"}
-                                </strong>
+                                        <strong>
+                                            {bestPair.background}
+                                        </strong>
+
+                                    </div>
+
+                                    <div>
+
+                                        <span>
+                                            Foreground
+                                        </span>
+
+                                        <strong>
+                                            {bestPair.foreground}
+                                        </strong>
+
+                                    </div>
+
+                                </div>
+
+                                <div className="contrast-status">
+
+                                    <span>
+                                        WCAG Contrast
+                                    </span>
+
+                                    <strong>
+                                        {bestPair.ratio >= 7
+                                            ? "AAA"
+                                            : bestPair.ratio >= 4.5
+                                                ? "AA"
+                                                : "Poor"}
+                                    </strong>
+
+                                </div>
 
                             </div>
 
                         </div>
-                    </div>
-                )}
+
+                    )}
+
 
                 {/* ============================= */}
                 {/* COLOR TOKENS */}
                 {/* ============================= */}
 
                 {activeTab === "tokens" && (
+
                     <div className="tokens-playground">
 
                         <div className="tokens-header">
 
                             <div>
+
                                 <span>
                                     DESIGN TOKENS
                                 </span>
@@ -375,7 +471,9 @@ function PalettePlayground({ palette, setPalette }) {
                                 <h3>
                                     Your palette, ready to use.
                                 </h3>
+
                             </div>
+
 
                             <div className="token-format-tabs">
 
@@ -385,13 +483,13 @@ function PalettePlayground({ palette, setPalette }) {
                                             ? "active"
                                             : ""
                                     }
-                                    onClick={() => {
-                                        setFormat("css");
-                                        setCopied(false);
-                                    }}
+                                    onClick={() =>
+                                        handleFormatChange("css")
+                                    }
                                 >
                                     CSS
                                 </button>
+
 
                                 <button
                                     className={
@@ -399,13 +497,13 @@ function PalettePlayground({ palette, setPalette }) {
                                             ? "active"
                                             : ""
                                     }
-                                    onClick={() => {
-                                        setFormat("json");
-                                        setCopied(false);
-                                    }}
+                                    onClick={() =>
+                                        handleFormatChange("json")
+                                    }
                                 >
                                     JSON
                                 </button>
+
 
                                 <button
                                     className={
@@ -413,33 +511,50 @@ function PalettePlayground({ palette, setPalette }) {
                                             ? "active"
                                             : ""
                                     }
-                                    onClick={() => {
-                                        setFormat("tailwind");
-                                        setCopied(false);
-                                    }}
+                                    onClick={() =>
+                                        handleFormatChange(
+                                            "tailwind"
+                                        )
+                                    }
                                 >
                                     Tailwind
+                                </button>
+
+
+                                <button
+                                    className={
+                                        format === "svg"
+                                            ? "active"
+                                            : ""
+                                    }
+                                    onClick={() =>
+                                        handleFormatChange("svg")
+                                    }
+                                >
+                                    SVG
                                 </button>
 
                             </div>
 
                         </div>
 
+
+                        {/* ============================= */}
+                        {/* CODE / SVG OUTPUT */}
+                        {/* ============================= */}
+
                         <div className="token-code">
 
                             <div className="code-header">
 
                                 <span>
-                                    {format === "css"
-                                        ? "palette.css"
-                                        : format === "json"
-                                            ? "palette.json"
-                                            : "tailwind.config.js"}
+                                    {getFilename()}
                                 </span>
 
                                 <button
                                     onClick={copyOutput}
                                 >
+
                                     {copied ? (
                                         <>
                                             <Check size={14} />
@@ -451,9 +566,11 @@ function PalettePlayground({ palette, setPalette }) {
                                             Copy
                                         </>
                                     )}
+
                                 </button>
 
                             </div>
+
 
                             <pre>
                                 <code>
@@ -463,57 +580,79 @@ function PalettePlayground({ palette, setPalette }) {
 
                         </div>
 
+
+                        {/* ============================= */}
+                        {/* COLOR TOKEN LIST */}
+                        {/* ============================= */}
+
                         <div className="token-list">
 
-                            {colorDetails.map((color) => (
-
-                                <div
-                                    className="token-item"
-                                    key={color.hex}
-                                >
+                            {colorDetails.map(
+                                (color, index) => (
 
                                     <div
-                                        className="token-swatch"
-                                        style={{
-                                            backgroundColor: color.hex
-                                        }}
-                                    />
+                                        className="token-item"
+                                        key={`${color.role}-${index}`}
+                                    >
 
-                                    <div className="token-info">
+                                        <div
+                                            className="token-swatch"
+                                            style={{
+                                                backgroundColor:
+                                                    color.hex
+                                            }}
+                                        />
 
-                                        <span>
-                                            {color.role}
-                                        </span>
+                                        <div className="token-info">
 
-                                        <strong>
-                                            --{color.role
-                                                .toLowerCase()
-                                                .replace(/\s+/g, "-")}
-                                        </strong>
+                                            <span>
+                                                {color.role}
+                                            </span>
+
+                                            <strong>
+                                                --
+                                                {color.role
+                                                    .toLowerCase()
+                                                    .replace(
+                                                        /\s+/g,
+                                                        "-"
+                                                    )}
+                                            </strong>
+
+                                        </div>
+
+                                        <code>
+                                            {color.hex}
+                                        </code>
 
                                     </div>
 
-                                    <code>
-                                        {color.hex}
-                                    </code>
-
-                                </div>
-
-                            ))}
+                                )
+                            )}
 
                         </div>
+
+
+                        {/* ============================= */}
+                        {/* DOWNLOAD */}
+                        {/* ============================= */}
 
                         <button
                             className="download-tokens"
                             onClick={downloadOutput}
                         >
+
                             <Download size={15} />
 
                             Download{" "}
-                            {format.toUpperCase()} file
+                            {format === "tailwind"
+                                ? "Tailwind config"
+                                : `${format.toUpperCase()} file`}
+
                         </button>
 
                     </div>
+
                 )}
 
             </div>
