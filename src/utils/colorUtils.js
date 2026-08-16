@@ -72,31 +72,25 @@ export function getColorDetails(hex, index) {
 }
 
 export function getColorRole(hex, index) {
-    const { r, g, b } = hexToRgb(hex);
+    switch (index) {
+        case 0:
+            return "Background";
 
-    const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        case 1:
+            return "Primary";
 
-    if (index === 0 && brightness < 80) {
-        return "Background";
+        case 2:
+            return "Secondary";
+
+        case 3:
+            return "Accent";
+
+        case 4:
+            return "Highlight";
+
+        default:
+            return "Supporting";
     }
-
-    if (index === 0) {
-        return "Primary";
-    }
-
-    if (index === 1) {
-        return "Secondary";
-    }
-
-    if (index === 2) {
-        return "Accent";
-    }
-
-    if (index === 3) {
-        return "Highlight";
-    }
-
-    return "Supporting";
 }
 
 function getLuminance(r, g, b) {

@@ -214,10 +214,6 @@ function PalettePlayground({ palette, setPalette }) {
 
             <div className="playground-content">
 
-                {/* ============================= */}
-                {/* UI PREVIEW */}
-                {/* ============================= */}
-
                 {activeTab === "preview" && (
 
                     <div
@@ -355,11 +351,6 @@ function PalettePlayground({ palette, setPalette }) {
 
                 )}
 
-
-                {/* ============================= */}
-                {/* CONTRAST */}
-                {/* ============================= */}
-
                 {activeTab === "contrast" &&
                     bestPair && (
 
@@ -451,11 +442,6 @@ function PalettePlayground({ palette, setPalette }) {
 
                     )}
 
-
-                {/* ============================= */}
-                {/* COLOR TOKENS */}
-                {/* ============================= */}
-
                 {activeTab === "tokens" && (
 
                     <div className="tokens-playground">
@@ -538,11 +524,6 @@ function PalettePlayground({ palette, setPalette }) {
 
                         </div>
 
-
-                        {/* ============================= */}
-                        {/* CODE / SVG OUTPUT */}
-                        {/* ============================= */}
-
                         <div className="token-code">
 
                             <div className="code-header">
@@ -579,11 +560,6 @@ function PalettePlayground({ palette, setPalette }) {
                             </pre>
 
                         </div>
-
-
-                        {/* ============================= */}
-                        {/* COLOR TOKEN LIST */}
-                        {/* ============================= */}
 
                         <div className="token-list">
 
@@ -631,11 +607,6 @@ function PalettePlayground({ palette, setPalette }) {
                             )}
 
                         </div>
-
-
-                        {/* ============================= */}
-                        {/* DOWNLOAD */}
-                        {/* ============================= */}
 
                         <button
                             className="download-tokens"

@@ -66,7 +66,8 @@
 }
 
 .ui-preview {
-    min-height: 540px;
+    height: 600px;
+    box-sizing: border-box;
     padding: 1.5rem;
     border-radius: 26px;
     overflow: hidden;
@@ -229,7 +230,8 @@
 }
 
 .contrast-playground {
-    min-height: 540px;
+    height: 600px;
+    box-sizing: border-box;
     display: grid;
     place-items: center;
     padding: 3rem;
@@ -341,25 +343,14 @@
 
 }
 
-/* ============================= */
-/* TOKEN PLAYGROUND */
-/* ============================= */
-
 .tokens-playground {
     min-height: 540px;
-
+    box-sizing: border-box;
     padding: 2rem;
-
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 26px;
-
     background: rgba(255, 255, 255, 0.03);
 }
-
-
-/* ============================= */
-/* HEADER */
-/* ============================= */
 
 .tokens-header {
     display: flex;
@@ -392,11 +383,6 @@
     font-size: 1.5rem;
     line-height: 1.2;
 }
-
-
-/* ============================= */
-/* FORMAT SWITCHER */
-/* ============================= */
 
 .token-format-tabs {
     display: flex;
@@ -451,11 +437,6 @@
     transform: scale(0.96);
 }
 
-
-/* ============================= */
-/* CODE BLOCK */
-/* ============================= */
-
 .token-code {
     overflow: hidden;
 
@@ -467,9 +448,6 @@
     box-shadow:
         0 15px 35px rgba(0, 0, 0, 0.18);
 }
-
-
-/* Code header */
 
 .code-header {
     display: flex;
@@ -491,9 +469,6 @@
     font-family: monospace;
     letter-spacing: 0.2px;
 }
-
-
-/* Copy button */
 
 .code-header button {
     display: inline-flex;
@@ -527,9 +502,6 @@
     color: #ffffff;
 }
 
-
-/* Code */
-
 .token-code pre {
     margin: 0;
 
@@ -553,11 +525,6 @@
 .token-code code {
     font-family: inherit;
 }
-
-
-/* ============================= */
-/* TOKEN LIST */
-/* ============================= */
 
 .token-list {
     display: grid;
@@ -638,11 +605,6 @@
     font-size: 0.65rem;
 }
 
-
-/* ============================= */
-/* DOWNLOAD */
-/* ============================= */
-
 .download-tokens {
     display: flex;
     align-items: center;
@@ -689,10 +651,6 @@
     transform: scale(0.99);
 }
 
-
-/* ============================= */
-/* RESPONSIVE */
-/* ============================= */
 
 @media (max-width: 600px) {
 
