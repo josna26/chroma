@@ -4,7 +4,7 @@ import { getColorDetails } from "../utils/colorUtils";
 
 function PalettePreview({ palette, setPalette }) {
     const colorDetails = palette.map((color, index) =>
-        getColorDetails(color, index)
+        getColorDetails(color.hex, index, color.role)
     );
 
     return (

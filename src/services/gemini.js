@@ -1,28 +1,28 @@
-import { GoogleGenAI } from "@google/genai";
-
-const ai = new GoogleGenAI({
-  apiKey: import.meta.env.VITE_GEMINI_API_KEY,
-});
-
 export async function generatePalette(prompt) {
-  const response = await ai.models.generateContent({
-    model: "gemini-3.6-flash",
-    contents: `
-You are a professional UI/UX color designer.
+    const response = await fetch(
+        "http://localhost:3001/api/generate-palette",
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                prompt
+            })
+        }
+    );
 
-Generate exactly five HEX colors based on this prompt.
+    const data = await response.json();
 
-Prompt:
-${prompt}
+    if (!response.ok) {
+        const error = new Error(
+            data.error || "Failed to generate palette."
+        );
 
-Rules:
-- Return ONLY a JSON array.
-- No markdown.
-- No explanations.
-- Example:
-["#1E293B","#3B82F6","#A855F7","#F8FAFC","#FACC15"]
-`,
-  });
+        error.status = response.status;
 
-  return JSON.parse(response.text);
+        throw error;
+    }
+
+    return data.palette;
 }

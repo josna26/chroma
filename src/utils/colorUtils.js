@@ -54,7 +54,70 @@ export function rgbToHsl(r, g, b) {
     };
 }
 
-export function getColorDetails(hex, index) {
+export function assignColorRoles(colors) {
+    const analyzed = colors.map((color, originalIndex) => {
+        const hex = color.hex;
+
+        const { r, g, b } = hexToRgb(hex);
+        const hsl = rgbToHsl(r, g, b);
+
+        return {
+            hex,
+            originalIndex,
+            ...hsl
+        };
+    });
+
+    const remaining = [...analyzed];
+    const roles = new Array(colors.length);
+
+    const takeBest = (scoreFn, roleName) => {
+        const winner = remaining.reduce((best, c) =>
+            scoreFn(c) > scoreFn(best) ? c : best
+        );
+
+        roles[winner.originalIndex] = roleName;
+
+        remaining.splice(
+            remaining.indexOf(winner),
+            1
+        );
+    };
+
+    takeBest(
+        (c) => c.l - c.s * 0.5,
+        "Background"
+    );
+
+    takeBest(
+        (c) => c.s - Math.abs(c.l - 50) * 0.6,
+        "Primary"
+    );
+
+    takeBest(
+        (c) => c.s * 0.6 + c.l * 0.4,
+        "Highlight"
+    );
+
+    takeBest(
+        (c) => c.s,
+        "Secondary"
+    );
+
+    remaining.forEach((c) => {
+        roles[c.originalIndex] = "Accent";
+    });
+
+    for (let i = 0; i < roles.length; i++) {
+        if (!roles[i]) {
+            roles[i] = "Supporting";
+        }
+    }
+
+    return roles;
+}
+
+export function getColorDetails(hex, index, role) {
     const rgb = hexToRgb(hex);
 
     const hsl = rgbToHsl(
@@ -67,7 +130,7 @@ export function getColorDetails(hex, index) {
         hex,
         rgb: `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`,
         hsl: `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`,
-        role: getColorRole(hex, index)
+        role: role || getColorRole(hex, index)
     };
 }
 
@@ -169,16 +232,16 @@ export function findBestContrastPair(colors) {
     for (let i = 0; i < colors.length; i++) {
         for (let j = i + 1; j < colors.length; j++) {
             const ratio = getContrastRatio(
-                colors[i],
-                colors[j]
+                colors[i].hex,
+                colors[j].hex
             );
 
             if (ratio > highestContrast) {
                 highestContrast = ratio;
 
                 bestPair = {
-                    foreground: colors[i],
-                    background: colors[j],
+                    foreground: colors[i].hex,
+                    background: colors[j].hex,
                     ratio
                 };
             }

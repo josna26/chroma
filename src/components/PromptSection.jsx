@@ -30,10 +30,17 @@ function PromptSection({ setPalette }) {
         } catch (error) {
             console.error(error);
 
-            if (error?.message?.includes("429")) {
-                setError("Chroma needs a moment ✨ Try again in a few seconds.");
+            if (
+                error?.status === 429 ||
+                error?.message?.toLowerCase().includes("rate limit")
+            ) {
+                setError(
+                    "Chroma needs a moment ✨ Try again in a few seconds."
+                );
             } else {
-                setError("Something went wrong. Please try again.");
+                setError(
+                    "Something went wrong. Please try again."
+                );
             }
         } finally {
             setLoading(false);

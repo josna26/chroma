@@ -9,6 +9,7 @@ import "../styles/components/palette-playground.css";
 
 import {
     getColorDetails,
+    assignColorRoles,
     findBestContrastPair
 } from "../utils/colorUtils";
 
@@ -28,8 +29,10 @@ function PalettePlayground({ palette, setPalette }) {
         return null;
     }
 
+    const roles = assignColorRoles(palette);
+
     const colorDetails = palette.map((color, index) =>
-        getColorDetails(color, index)
+        getColorDetails(color.hex, index, roles[index])
     );
 
     const background = colorDetails.find(

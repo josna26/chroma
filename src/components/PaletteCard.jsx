@@ -101,7 +101,12 @@ function PaletteCard({ color, index, setPalette }) {
 
         setPalette((currentPalette) =>
             currentPalette.map((currentColor, currentIndex) =>
-                currentIndex === index ? newHex : currentColor
+                currentIndex === index
+                    ? {
+                        ...currentColor,
+                        hex: newHex
+                    }
+                    : currentColor
             )
         );
     };
@@ -129,7 +134,12 @@ function PaletteCard({ color, index, setPalette }) {
 
         setPalette((currentPalette) =>
             currentPalette.map((currentColor, currentIndex) =>
-                currentIndex === index ? originalColor : currentColor
+                currentIndex === index
+                    ? {
+                        ...currentColor,
+                        hex: originalColor
+                    }
+                    : currentColor
             )
         );
     };
