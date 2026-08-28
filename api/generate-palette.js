@@ -1,29 +1,23 @@
-import "dotenv/config";
-import express from "express";
-import cors from "cors";
 import { GoogleGenAI } from "@google/genai";
-
-const app = express();
-
-const PORT = process.env.PORT || 3001;
-
-app.use(
-    cors({
-        origin: "http://localhost:5173"
-    })
-);
-
-app.use(express.json());
 
 const ai = new GoogleGenAI({
     apiKey: process.env.GEMINI_API_KEY
 });
 
-app.post("/api/generate-palette", async (req, res) => {
-    try {
-        const { prompt } = req.body;
+export default async function handler(req, res) {
+    if (req.method !== "POST") {
+        return res.status(405).json({
+            error: "Method not allowed."
+        });
+    }
 
-        if (!prompt || !prompt.trim()) {
+    try {
+        const { prompt } = req.body || {};
+
+        if (
+            typeof prompt !== "string" ||
+            !prompt.trim()
+        ) {
             return res.status(400).json({
                 error: "Prompt is required."
             });
@@ -78,7 +72,6 @@ Rules:
 
         let text = response.text.trim();
 
-        // Remove accidental markdown fences.
         text = text
             .replace(/^```json\s*/i, "")
             .replace(/^```\s*/i, "")
@@ -87,12 +80,13 @@ Rules:
 
         const palette = JSON.parse(text);
 
-        /*
-         * Validate the response BEFORE sending it
-         * to React.
-         */
-        if (!Array.isArray(palette) || palette.length !== 5) {
-            throw new Error("Gemini returned an invalid palette.");
+        if (
+            !Array.isArray(palette) ||
+            palette.length !== 5
+        ) {
+            throw new Error(
+                "Gemini returned an invalid palette."
+            );
         }
 
         const validRoles = [
@@ -126,10 +120,6 @@ Rules:
             );
         }
 
-        /*
-         * Normalize HEX values so the rest of Chroma
-         * always receives uppercase HEX strings.
-         */
         const normalizedPalette = palette.map(
             (color) => ({
                 hex: color.hex.toUpperCase(),
@@ -137,7 +127,7 @@ Rules:
             })
         );
 
-        return res.json({
+        return res.status(200).json({
             palette: normalizedPalette
         });
 
@@ -160,10 +150,4 @@ Rules:
             error: "Failed to generate palette."
         });
     }
-});
-
-app.listen(PORT, () => {
-    console.log(
-        `Chroma API running on http://localhost:${PORT}`
-    );
-});
+}

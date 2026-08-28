@@ -1,6 +1,6 @@
 export async function generatePalette(prompt) {
     const response = await fetch(
-        "http://localhost:3001/api/generate-palette",
+        "/api/generate-palette",
         {
             method: "POST",
             headers: {
