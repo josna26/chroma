@@ -2,6 +2,8 @@
 
 *An AI-powered color palette generator that transforms moods, aesthetics, ideas, and descriptions into harmonious, customizable color palettes.*
 
+🌐 **Live Demo:** [Launch Chroma](https://chroma-6n2spm7j4-josna2.vercel.app/)
+
 ---
 
 ## 📌 Table of Contents
